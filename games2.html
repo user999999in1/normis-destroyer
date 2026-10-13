@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>Normis Destroyer</title><style>
+body{margin:0;background:#0d0e15;color:#a5a9c0;font-family:monospace;padding:15px;display:flex;flex-direction:column;height:100vh;box-sizing:border-box}
+#h{display:flex;justify-content:space-between;border-bottom:2px solid #2f334d;padding-bottom:10px;font-size:14px;font-weight:bold}
+#t{flex-grow:1;overflow-y:auto;margin:15px 0;padding:10px;background:#161824;border:1px solid #2f334d;border-radius:4px;white-space:pre-line;font-size:15px;color:#c0caf5}
+.b{background:#24283b;color:#f7768e;border:1px solid #ff007c;padding:12px;margin:5px 0;cursor:pointer;border-radius:4px;text-align:left;font-family:monospace;font-size:14px;transition:0.2s}
+.b:hover{background:#ff007c;color:#fff}
+.status{color:#7aa2f7} .burn{color:#f7768e} .win{color:#7abc6d}
+</style></head><body>
+<div id="h">
+  <div>ДОФАМИН: <span id="d" class="win">100</span></div>
+  <div>КОРТИЗОЛ: <span id="k" class="burn">0</span></div>
+  <div>БАЛЛОНЫ: <span id="p">1</span></div>
+</div>
+<div id="t">=== СИМУЛЯТОР ВЫНОСА НОРМИСОВ ===\nПроцессор молотит на полную. Вокруг эхо-камеры и медлительные муравьи. Задача: выжить и не расплавить ПФК.</div>
+<div id="c"></div>
+<script>
+let dof=100,cort=0,spray=1,step=0;
+const t=document.getElementById('t'),c=document.getElementById('c'),d=document.getElementById('d'),k=document.getElementById('k'),p=document.getElementById('p');
+function stat(){d.innerText=dof;k.innerText=cort;p.innerText=spray;if(cort>=100){t.innerText+='\n\n[КРИТИЧЕСКИЙ СБОЙ] Процессор сгорел в кортизоле от тупости среды! Слив сессии.';c.innerHTML='';}else if(dof<=0){t.innerText+='\n\n[АНАБИОЗ] Дофамин упал на ноль. Смерть от скуки на холостом ходу.';c.innerHTML='';}}
+function print(txt){t.innerText+='\n\n'+txt;t.scrollTop=t.scrollHeight;}
+function opt(opts){c.innerHTML='';opts.forEach(o=>{let b=document.createElement('button');b.className='b';b.innerText=o.text;b.onclick=o.cb;c.appendChild(b);});}
+function event(){step++;stat();if(cort>=100||dof<=0)return;
+if(step>4){print('<ПОБЕДА> Ты переиграл эту систему координат. Все нормисы ущемлены, порты закрыты, эго в абсолютном прайме!');c.innerHTML='';return;}
+let r=Math.random();
+if(r<0.33){
+  print('[СОБЫТИЕ] Четыре додика на улице преграждают путь и гнут пальцы, пытаясь навязать рукопожатие.');
+  opt([
+    {text:"Выдать резкое 'А чо?' и тактически съебаться на ультра-скорости",cb:()=>{dof+=20;cort-=10;print('Эффективно! Додики остались стоять в пустоте. Дофамин +, Кортизол -');event();}},
+    {text:"Вступить в смолл-ток и взывать к их благоразумию",cb:()=>{cort+=35;dof-=20;print('Баг! Зэк начинает замахиваться кулаками в воздух. Ментальный дамаг!');event();}},
+    {text:"Залить их ебла из перцового баллона",cb:()=>{if(spray>0){spray--;dof+=40;print('Триумф! Муравьи лопаются от норадреналина. Чистый ЖОР!');}else{cort+=20;print('Баллонов нет! Пришлось терпеть оски.');}event();}}
+  ]);
+}else if(r<0.66){
+  print('[СОБЫТИЕ] В ЛС заходит Ева/Нарцисска с лестью: "Привет, мне очень нравится твоя личность! Без троллинга."');
+  opt([
+    {text:"Распознать фальшь по лингвистике и выдать: 'Молодец сосет конец'",cb:()=>{dof+=30;print('Снос маски в один ход! Баба словила тайм-аут и заткнулась в ужасе.');event();}},
+    {text:"Открыть порты и начать искренне отвечать про свои диагнозы",cb:()=>{cort+=40;dof-=30;print('Диверсия! Шпионка сгарбажила инфу, сделала скрины и слила админу-вахтеру.');event();}},
+    {text:"Эмулировать тупость, бекать-мекать, пустить ложный черновик",cb:()=>{dof+=15;cort-=5;print('Тактический самосаботаж. Она решила, что ты шкаляр, и отъебалась.');event();}}
+  ]);
+}else{
+  print('[СОБЫТИЕ] Админ-вахтер в чате врубает режим тирана: "Я не буду разбираться, кто прав, всем МУТ за слово баба!"');
+  opt([
+    {text:"Написать: 'Эй ты, повесь мне плашку 67iq'",cb:()=>{dof+=35;cort-=15;print('Хак системы! Ты превентивно забрал худший ярлык, обнулив ценность его бана.');event();}},
+    {text:"Призывать модератора к совести на его же территории",cb:()=>{cort+=30;print('Ущербно. Вахтер рявкает и банит тебя. Внутренняя пружина сжалась.');event();}}
+  ]);
+}}
+event();
+</script></body></html>

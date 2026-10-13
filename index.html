@@ -33,7 +33,8 @@ body { margin:0; background:#0d0e15; color:#a5a9c0; font-family:monospace; paddi
   <button class="btn" onclick="startG(4)">4. 2G HIGHWAY VSTRECHKA</button>
   <button class="btn" onclick="startG(5)">5. CARDBLACKJACK PRO</button>
   <button class="btn" onclick="startG(6)">6. SNaKE (WITH D-PAD)</button>
-   <button class="btn" onclick="startG(7)">7. Cats Sarancha </button>
+  <button class="btn" onclick="startG(7)">7. Cats Sarancha</button>
+  <button class="btn" onclick="startG(8)" style="border-color:#ff007c; color:#ff007c;">8. HEADLESS RUNNER (HEAVY ASSETS)</button>
   <div class="sub">ОПТИМИЗИРОВНО ПОД ТАЧ. 2G READY.</div>
 </div>
 
@@ -58,15 +59,45 @@ function startG(id){
   else if(id===4) initHighway();
   else if(id===5) initBlackjack();
   else if(id===6) initSnake();
-   else if(id===7) initCatsSarancha();
+  else if(id===7) initCatsSarancha();
+  else if(id===8) {
+    // Проверяем, подгружен ли внешний файл игры, чтобы не качать его повторно
+    if(typeof initHeadlessRunner === 'function') {
+      initHeadlessRunner();
+    } else {
+      gb.innerHTML = '<div style="color:#7aa2f7; margin:auto; text-align:center;">ЗАГРУЗКА ТЯЖЕЛОГО МОДУЛЯ ИГРЫ...</div>';
+      let script = document.createElement('script');
+      script.src = 'headless_runner/game.js';; // Путь к твоему внешнему файлу с кодом раннера
+      script.onload = () => {
+        if(typeof initHeadlessRunner === 'function') {
+          initHeadlessRunner();
+        } else {
+          gb.innerHTML = '<div style="color:#f7768e; margin:auto;">ОШИБКА: Модуль не инициализировал функцию.</div>';
+        }
+      };
+      script.onerror = () => {
+        gb.innerHTML = '<div style="color:#f7768e; margin:auto;">ОШИБКА: Не удалось найти файл headless_game.js</div>';
+      };
+      document.head.appendChild(script);
+    }
+  }
 }
 
 function exitG(){
+  if(typeof window.stopHeadlessAudio === 'function') {
+    window.stopHeadlessAudio(); // Гасим звуки раннера
+  }
+  if(window.hrLoopId) {
+    cancelAnimationFrame(window.hrLoopId);
+    window.hrLoopId = null;
+  }
   if(loopId) cancelAnimationFrame(loopId);
   clearTimeout(m_timer);
   window.onkeydown=null;
   gz.style.display='none'; m.style.display='grid';
 }
+
+
 
 /* ================= 1. NORMIS DESTROYER RPG ================= */
 function initRpg(){
